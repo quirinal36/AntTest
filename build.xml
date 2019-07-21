@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project name="GunsanAntTest" default="tgt.deploy" basedir=".">
+	<description>
+		MyFirst Ant build project
+	</description>
+	<property name="dir.src" location="${basedir}/src"/>
+	<property name="dir.build" location="${basedir}/build"/>
+	<property name="dir.deploy" location="${basedir}/deploy"/>
+	<property name="jar.lib" location="${basedir}/WEB-INF/lib"/>
+
+	<path id="build.classpath">
+	  <fileset dir="${basedir}/WEB-INF/lib">
+	    <include name="**/*.jar"/>
+	  </fileset>
+	</path>
+	
+	<target name="tgt.clean" description="deletes generated directories">
+		<delete dir="${dir.build}"/>
+		<delete dir="${dir.deploy}"/>
+	</target>
+	<target name="tgt.init" depends="tgt.clean" description="generate directories">
+		<tstamp/>
+		<mkdir dir="${dir.build}"/>
+		<mkdir dir="${dir.build}/classes"/>
+		<mkdir dir="${dir.deploy}"/>
+		<mkdir dir="${dir.deploy}/lib"/>
+	</target>
+
+	<target name="tgt.checkout" depends="tgt.init" description="source checkout">
+	</target>
+	<target name="tgt.compile" depends="tgt.checkout" description="source compilation">
+		<javac srcdir="${dir.src}" destdir="${dir.build}/classes">
+			<classpath refid="build.classpath"></classpath>
+		</javac>
+	</target>
+	<target name="tgt.package" depends="tgt.compile" description="packaging">
+		<jar jarfile="${dir.deploy}/lib/GunsanAntTest-${DSTAMP}.jar" basedir="${dir.build}/classes">
+		</jar>
+	</target>
+	<target name="tgt.deploy" depends="tgt.package" description="deploy">
+	</target>
+
+</project>

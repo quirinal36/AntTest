@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="euc-kr"?>
+<project name="WebServiceClientBuilder" default="client" basedir=".">
+	<property name="bmsurl" value="localhost:7001"/>
+	<target name="set-env" depends="check-env,set-wllib,set-wllib2">
+		<echo message="wl.lib : ${wl.lib}"/>
+	</target>
+	<target name="check-env">
+		<available file="${env.WL_HOME}" type="dir" property="wlhome.present"/>
+		<echo message="env.WL_HOME ${env.WL_HOME}"/>
+	</target>
+	<target name="set-wllib2" unless="wlhome.present">
+		<property name="wl.lib" value="${env.WL_HOME}/server/lib"></property>
+		<echo message="set wl.lib to ${wl.lib}"/>
+	</target>
+	<target name="set-wllib" unless="wlhome.present">
+		<property name="wl.lib" value="${env.WL_HOME}/server/lib"></property>
+		<echo message="set wl.lib to ${wl.lib}"/>
+	</target>
+	<target name="init" depends="set-env">
+		<taskdef name="clientgen" classname="weblogic.wsee.tools.anttasks.ClientGenTask"
+			classpath="${java.class.path};c:/Oracle/Middleware/Oracle_Home/wlserver/server/lib/weblogic.jar;"/>
+	</target>
+	<target name="client" depends="init">
+		<delete includeEmptyDirs="true">
+			<fileset dir="." includes="*client.jar"/>
+		</delete>
+		<clientgen wsdl="e:/BmsSifOrgUserListService2.txt"
+					destDir = "e:/output/cientclasses"
+					classpath="${wl.lib}/webserviceclient.jar"
+					packageName="gov.bms.webservices.client"/>
+		<clientgen wsdl="e:/BmsSifOrgUserListService_V42.txt"
+					destDir = "e:/output/cientclasses"
+					classpath="${wl.lib}/webserviceclient.jar"
+					packageName="gov.bms.srv.vo"/>
+		
+		
+	</target>
+</project>
